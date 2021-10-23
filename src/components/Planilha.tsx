@@ -1,27 +1,10 @@
 import { useState, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
-import ReactGridLayout, { Responsive, WidthProvider } from 'react-grid-layout'
-const ResponsiveReactGridLayout = WidthProvider(Responsive)
+import EditInPlace from './EditInPlace'
+import GridLayout from 'react-grid-layout'
 import generateLayout from './generateLayout'
-
-interface IProps {
-  className: string
-  rowHeight: number
-  onLayoutChange: (layout: any, layouts: any) => void
-  cols: { lg: number; md: number; sm: number; xs: number; xxs: number }
-  initialLayout: Function
-  fixed: boolean
-}
-
-interface GenerateLayout {
-  x: number
-  y: number
-  w: number
-  h: number
-  i: string
-  static: boolean
-}
+import { IShowcaseLayout, GenerateLayout } from '../type/types'
 
 ShowcaseLayout.defaultProps = {
   className: 'layout',
@@ -40,16 +23,17 @@ interface State {
   compactType: 'No Compaction' | 'horizontal' | 'vertical' | null | undefined
   currentBreakpoint: string
   mounted: boolean
-  layouts: any
+  layouts: { lg: GenerateLayout[] }
 }
 
-export default function ShowcaseLayout(props: IProps) {
+export default function ShowcaseLayout(props: IShowcaseLayout) {
   const [state, setState] = useState<State>({
     currentBreakpoint: 'lg',
     compactType: 'No Compaction',
     mounted: false,
     layouts: { lg: props.initialLayout },
   })
+  const [showCode, setShowCode] = useState(false)
   // const [fixed, setFixed] = useState(false)
 
   function componentDidMount() {
@@ -57,23 +41,39 @@ export default function ShowcaseLayout(props: IProps) {
   }
 
   const dom = useMemo(() => {
-    return _.map(state.layouts.lg, function (l, i) {
+    return _.map(state.layouts.lg, function (__, i) {
+      const code = state.layouts.lg[i]?.code
       return (
-        <div key={i} className={props.fixed ? 'static' : ''}>
+        <div key={(i + 1).toString()} className={props.fixed ? 'static' : ''}>
           {props.fixed ? (
             <span
               className="text"
               title="This item is static and cannot be removed or resized."
             >
-              Static - {i}
+              Static - {i + 1}
             </span>
           ) : (
-            <span className="text">{i}</span>
+            <div>
+              <span className="text">
+                {showCode ? (
+                  <EditInPlace
+                    value={code || ''}
+                    onChange={(value: string) => {
+                      const layouts = _.cloneDeep(state.layouts)
+                      layouts.lg[i].code = value
+                      setState(prev => ({ ...prev, layouts }))
+                    }}
+                  />
+                ) : (
+                  code && eval(code)
+                )}
+              </span>
+            </div>
           )}
         </div>
       )
     })
-  }, [state.layouts.lg, props.fixed])
+  }, [state.layouts.lg, showCode])
 
   function onBreakpointChange(breakpoint: string) {
     setState(prev => ({
@@ -93,13 +93,19 @@ export default function ShowcaseLayout(props: IProps) {
     if (compactType) setState(prev => ({ ...prev, compactType }))
   }
 
-  function onLayoutChange(layout: any, layouts: any) {
-    props.onLayoutChange(layout, layouts)
+  function onLayoutChange(layout: any) {
+    props.onLayoutChange(layout)
   }
 
-  // function onNewLayout() {
-  //   setState(prev => ({ ...prev, layouts: { lg: generateLayout() } }))
-  // }
+  function stringifyLayout() {
+    return state.layouts.lg.map(function (l) {
+      return (
+        <div className="layoutItem" key={l.i}>
+          <b>{l.i}</b>: [{l.x}, {l.y}, {l.w}, {l.h}]
+        </div>
+      )
+    })
+  }
 
   return (
     <div>
@@ -112,23 +118,23 @@ export default function ShowcaseLayout(props: IProps) {
         Compaction type:{' '}
         {state.compactType ? _.capitalize(state.compactType) : 'No Compaction'}
       </div>
+      <div>{stringifyLayout()}</div>
+      <button onClick={() => setShowCode(prev => !prev)}>
+        {showCode ? 'show visual' : 'show code'}
+      </button>
       {/* <button onClick={onNewLayout}>Generate New Layout</button> */}
       {/* <button onClick={onCompactTypeChange}>Change Compaction Type</button> */}
-      <ResponsiveReactGridLayout
-        {...props}
-        layouts={state.layouts}
-        onBreakpointChange={onBreakpointChange}
+      <GridLayout
+        className="layout"
+        layout={state.layouts.lg}
+        cols={12}
+        rowHeight={30}
+        width={1200}
         onLayoutChange={onLayoutChange}
-        // WidthProvider option
-        measureBeforeMount={false}
-        // I like to have it animate on mount. If you don't, delete `useCSSTransforms` (it's default `true`)
-        // and set `measureBeforeMount={true}`.
-        useCSSTransforms={state.mounted}
         compactType={state.compactType}
-        preventCollision={!state.compactType}
       >
         {dom}
-      </ResponsiveReactGridLayout>
+      </GridLayout>
     </div>
   )
 }
