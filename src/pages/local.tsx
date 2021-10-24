@@ -1,18 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import RGL, { WidthProvider } from 'react-grid-layout'
+import Planilha, { I_Layout } from '../components/Phanilha-L/Planilha'
 const ReactGridLayout = WidthProvider(RGL)
-
-interface I_Layout {
-  h: number
-  i: string
-  moved?: boolean | undefined
-  static?: boolean | undefined
-  w: number
-  x: number
-  y: number
-  minH?: number
-  minW?: number
-}
 
 LocalStorageLayout.defaultProps = {
   className: 'layout',
@@ -28,7 +17,7 @@ export default function LocalStorageLayout(props: any) {
   }
 
   useEffect(() => {
-    // setLayouts(loadLocalStorage())
+    setLayouts(loadLocalStorage())
   }, [])
 
   useEffect(() => {
@@ -55,8 +44,8 @@ export default function LocalStorageLayout(props: any) {
           w: 4,
           x: prev.length > 0 ? prev[len - 1].x + prev[len - 1].w : 1,
           y: 0,
-          minH: 2,
-          minW: 3,
+          minH: 2.5,
+          minW: 2.5,
         },
       ]
       saveLocalStorage(newLayout)
@@ -67,32 +56,14 @@ export default function LocalStorageLayout(props: any) {
   return (
     <div>
       <button onClick={() => addLayout()}>Add layout</button>
+      <button onClick={resetLayout}>Reset Layout</button>
       {layouts.length > 0 && layouts[0].h ? (
-        <div>
-          <button onClick={resetLayout}>Reset Layout</button>
-          <ReactGridLayout
-            {...props}
-            layout={layouts}
-            onLayoutChange={onLayoutChange}
-            compactType="No Compaction"
-            allowOverlap={true}
-          >
-            {layouts.map((layout: I_Layout) => (
-              <div
-                key={layout.i}
-                data-grid={{
-                  w: 2,
-                  h: layout.h,
-                  x: 0,
-                  y: 0,
-                  static: false,
-                }}
-              >
-                <span className="text">{layout.i}</span>
-              </div>
-            ))}
-          </ReactGridLayout>
-        </div>
+        <Planilha
+          resetLayout={resetLayout}
+          onLayoutChange={onLayoutChange}
+          layouts={layouts}
+          config={props}
+        />
       ) : (
         <div>Vazio</div>
       )}
