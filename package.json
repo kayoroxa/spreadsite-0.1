@@ -6,6 +6,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "easy-peasy": "^5.0.4",
     "install": "^0.13.0",
     "next": "latest",
     "npm": "^8.1.1",
