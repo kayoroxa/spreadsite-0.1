@@ -10,12 +10,14 @@ interface I_Layout {
   w: number
   x: number
   y: number
+  minH?: number
+  minW?: number
 }
 
 LocalStorageLayout.defaultProps = {
   className: 'layout',
-  // cols: 12,
-  rowHeight: 30,
+  cols: 80,
+  rowHeight: 2,
 }
 
 export default function LocalStorageLayout(props: any) {
@@ -26,7 +28,7 @@ export default function LocalStorageLayout(props: any) {
   }
 
   useEffect(() => {
-    setLayouts(loadLocalStorage())
+    // setLayouts(loadLocalStorage())
   }, [])
 
   useEffect(() => {
@@ -46,13 +48,15 @@ export default function LocalStorageLayout(props: any) {
       const newLayout: I_Layout[] = [
         ...prev,
         {
-          h: 1,
+          h: 3,
           i: len.toString(),
           moved: false,
           static: false,
-          w: 2,
+          w: 4,
           x: prev.length > 0 ? prev[len - 1].x + prev[len - 1].w : 1,
           y: 0,
+          minH: 2,
+          minW: 3,
         },
       ]
       saveLocalStorage(newLayout)
@@ -71,6 +75,7 @@ export default function LocalStorageLayout(props: any) {
             layout={layouts}
             onLayoutChange={onLayoutChange}
             compactType="No Compaction"
+            allowOverlap={true}
           >
             {layouts.map((layout: I_Layout) => (
               <div
