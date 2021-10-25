@@ -1,5 +1,8 @@
 import RGL, { WidthProvider } from 'react-grid-layout'
+import EditInPlace from '../EditInPlace'
 const ReactGridLayout = WidthProvider(RGL)
+
+// const { useState, useEffect } = React
 
 export interface I_Layout {
   h: number
@@ -12,24 +15,38 @@ export interface I_Layout {
   minH?: number
   minW?: number
   code?: string
+  css?: string
+}
+
+interface I_Planilha {
+  layouts: I_Layout[]
+  onLayoutChange: (layout: I_Layout[]) => void
+  config: {}
+  isEditing: boolean
+  onChangeCode: (code: string, index: number) => void
 }
 
 export default function Planilha({
-  resetLayout,
   layouts,
   onLayoutChange,
   config,
-}) {
+  isEditing,
+  onChangeCode,
+}: I_Planilha) {
   return (
     <div>
       <ReactGridLayout
         {...config}
         layout={layouts}
-        onLayoutChange={onLayoutChange}
         compactType="No Compaction"
+        onLayoutChange={l => {
+          onLayoutChange(l.map((v, i) => ({ ...layouts[i], ...v })))
+        }}
+        // onDragStop={onLayoutChange}
+        // onResizeStop={onLayoutChange}
         // allowOverlap={true}
       >
-        {layouts.map((layout: I_Layout) => (
+        {layouts.map((layout: I_Layout, index: number) => (
           <div
             key={layout.i}
             data-grid={{
@@ -40,7 +57,16 @@ export default function Planilha({
               static: false,
             }}
           >
-            <span className="text">{layout.i}</span>
+            {isEditing ? (
+              <EditInPlace
+                breakLine={true}
+                colors={true}
+                value={layout.code || ''}
+                onChange={(value: string) => onChangeCode(value, index)}
+              />
+            ) : (
+              layout.code
+            )}
           </div>
         ))}
       </ReactGridLayout>
