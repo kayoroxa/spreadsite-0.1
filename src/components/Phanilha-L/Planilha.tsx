@@ -1,6 +1,11 @@
 import RGL, { WidthProvider } from 'react-grid-layout'
 import EditInPlace from '../EditInPlace'
 const ReactGridLayout = WidthProvider(RGL)
+import { useState, useMemo, useEffect } from 'react'
+import { mainMethodsPlanilha } from '../../utils/methodsPlanilha'
+import _ from 'lodash'
+import { useStoreActions } from 'easy-peasy'
+import { MethodsStoreModel } from '../../../store/methodsStore'
 
 // const { useState, useEffect } = React
 
@@ -33,6 +38,19 @@ export default function Planilha({
   isEditing,
   onChangeCode,
 }: I_Planilha) {
+  const setLayout = useStoreActions<MethodsStoreModel>(
+    actions => actions.setLayout
+  )
+  const { pegar, tryEval } = mainMethodsPlanilha({ layouts, setLayout })
+  const [codesExec, setCodesExec] = useState<string[]>([])
+
+  useEffect(() => {
+    if (!isEditing) {
+      const codes = layouts.map(layout => tryEval(layout.code || ''))
+      setCodesExec(codes)
+    }
+  }, [isEditing])
+
   return (
     <div>
       <ReactGridLayout
@@ -58,14 +76,17 @@ export default function Planilha({
             }}
           >
             {isEditing ? (
-              <EditInPlace
-                breakLine={true}
-                colors={true}
-                value={layout.code || ''}
-                onChange={(value: string) => onChangeCode(value, index)}
-              />
+              <div style={{ display: 'flex' }}>
+                <span>{layout.i}</span>
+                <EditInPlace
+                  breakLine={true}
+                  colors={true}
+                  value={layout.code || ''}
+                  onChange={(value: string) => onChangeCode(value, index)}
+                />
+              </div>
             ) : (
-              layout.code
+              codesExec[index]
             )}
           </div>
         ))}

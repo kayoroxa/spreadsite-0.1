@@ -2,6 +2,7 @@ import { useStoreActions, useStoreState } from 'easy-peasy'
 import React, { useState, useEffect, useMemo } from 'react'
 import RGL, { WidthProvider } from 'react-grid-layout'
 import { MethodsStoreModel } from '../../../store/methodsStore'
+
 import Planilha, { I_Layout } from './Planilha'
 const ReactGridLayout = WidthProvider(RGL)
 
@@ -39,6 +40,7 @@ export default function ProviderPlanilha(props: any) {
   }
 
   function handleAddLayout() {
+    setIsEditing(true)
     const len = layouts.length
     const newLayout: I_Layout = {
       h: 3,
@@ -74,26 +76,26 @@ export default function ProviderPlanilha(props: any) {
 
   return (
     <div>
+      <div>{JSON.stringify(layouts)}</div>
       <button onClick={() => handleAddLayout()}>Add layout</button>
       <button onClick={resetLayout}>Reset Layout</button>
       <button onClick={() => setIsEditing(prev => !prev)}>
         {isEditing ? 'Stop Editing' : 'Start Editing'}
       </button>
-      {layouts.length > 0 && layouts[0].h ? (
-        // useMemo(
-        // () => (
-        <Planilha
-          onChangeCode={handleChangeCode}
-          isEditing={isEditing}
-          onLayoutChange={onLayoutChange}
-          layouts={layouts}
-          config={props}
-        />
-      ) : (
-        // ),
-        // [layouts.length, isEditing]
-        // )
-        <div>Vazio</div>
+      {useMemo(
+        () =>
+          layouts.length > 0 && layouts[0].h ? (
+            <Planilha
+              onChangeCode={handleChangeCode}
+              isEditing={isEditing}
+              onLayoutChange={onLayoutChange}
+              layouts={layouts}
+              config={props}
+            />
+          ) : (
+            <div>Vazio</div>
+          ),
+        [isEditing, layouts]
       )}
     </div>
   )

@@ -38,6 +38,9 @@ const EditInPlace = ({ value, onChange, breakLine, colors }: IProps) => {
       return 'subtitleToInner(value)'
     } else {
       // const colorValue = value
+      if (typeof value !== 'string') {
+        return value
+      }
       return value.replace(/,\s|,/g, ',<br />')
     }
   }, [value])
@@ -45,6 +48,9 @@ const EditInPlace = ({ value, onChange, breakLine, colors }: IProps) => {
   return (
     <ContainerEditInPlace>
       <span
+        style={{
+          backgroundColor: '#f5f5f5',
+        }}
         dangerouslySetInnerHTML={{ __html: innerHtml ? innerHtml : '' }}
         suppressContentEditableWarning={true}
         className="textArea"
