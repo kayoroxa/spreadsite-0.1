@@ -21,7 +21,7 @@
     "isolatedModules": true
   },
   "exclude": ["node_modules"],
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/pages/teste.jsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/pages/teste.jsx", "src/pages/local.jsx"],
   "typeRoots": [
     "node_modules/@types"
   ],
