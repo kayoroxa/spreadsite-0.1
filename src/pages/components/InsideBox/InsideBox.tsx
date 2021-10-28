@@ -25,9 +25,10 @@ InsideBox.defaultProps = {
 
 const MainStyle = styled.div`
   cursor: pointer;
-  width: 300px;
-  /* border: 1px solid black; */
-  /* border-radius: 5px; */
+  min-width: 300px;
+  min-height: 100px;
+  max-width: fit-content;
+
   box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
   margin: 20px;
   background: lightcyan;
@@ -62,18 +63,22 @@ export default function InsideBox({
         <div dangerouslySetInnerHTML={{ __html: value.html }} />
       )}
       {modeLang === 'css' && !isEditing && <div>{value.css}</div>}
-      {modeLang === 'js' && !isEditing && <div>{tryEval(value.js || '')}</div>}
-      <EditInPlace
-        value={value[modeLang]}
-        onChange={(value: ObjLang) =>
-          onValueChange((prev: ObjLang) => ({ ...prev, [modeLang]: value }))
-        }
-        breakLine={false}
-        colors={true}
-        isEditing={isEditing}
-        onBlur={() => setIsEditing(false)}
-        showDivResult={false}
-      />
+      {modeLang === 'js' && !isEditing && (
+        <div style={{ width: '100%' }}>{tryEval(value.js || '')}</div>
+      )}
+      {isEditing && (
+        <EditInPlace
+          value={value[modeLang]}
+          onChange={(value: ObjLang) =>
+            onValueChange((prev: ObjLang) => ({ ...prev, [modeLang]: value }))
+          }
+          breakLine={false}
+          colors={true}
+          isEditing={isEditing}
+          onBlur={() => setIsEditing(false)}
+          showDivResult={false}
+        />
+      )}
     </MainStyle>
   )
 }
