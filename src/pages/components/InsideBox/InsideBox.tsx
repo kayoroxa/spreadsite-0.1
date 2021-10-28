@@ -1,45 +1,66 @@
 import EditInPlace from '../EditInPlace'
 import { useState, useEffect } from 'react'
-import { tryEval } from '../../../utils/funcsForSheet'
+// import { tryEval } from '../../../utils/funcsForSheet'
+import styled from 'styled-components'
+import { I_Code } from '../../../utils/@types/sheetTypes'
 
+interface ObjLang {
+  js: ''
+  html: ''
+  css: ''
+}
 interface Props {
-  value: string
-  onValueChange: (value: string) => void
+  value: ObjLang
+  onValueChange: (callBack: (prev: ObjLang) => I_Code) => void
+  modeLang: 'js' | 'html' | 'css'
+  printBrothers: Function
+  tryEval: Function
 }
 
 InsideBox.defaultProps = {
-  value: '',
+  value: { js: '', html: '', css: '' },
   onValueChange: () => {},
+  modeLang: 'js',
 }
 
-export default function InsideBox({ value, onValueChange }: Props) {
+const MainStyle = styled.div`
+  ${({ cssInput }) => {
+    return cssInput
+  }}
+`
+
+export default function InsideBox({
+  value,
+  onValueChange,
+  modeLang,
+  printBrothers,
+  tryEval,
+}: Props) {
   const [isEditing, setIsEditing] = useState(false)
-  const [is, setIs] = useState<'js' | 'html' | 'string' | false>(false)
-
-  useEffect(() => {
-    if (isEditing) setIs(false)
-    else if (value.includes('<')) setIs('html')
-    else if (value?.[0]?.includes('=')) setIs('js')
-    else setIs('string')
-  }, [value, isEditing])
-
+  // console.log({ id: value, printBrothers: printBrothers() })
   return (
-    <div
+    <MainStyle
       onClick={() => setIsEditing(true)}
-      style={{ cursor: 'pointer', width: '300px' }}
+      style={{ cursor: 'pointer', width: '300px', border: '1px solid black' }}
+      cssInput={value.css}
     >
-      {is === 'html' && <div dangerouslySetInnerHTML={{ __html: value }} />}
-      {is === 'js' && <div>{tryEval(value || '')}</div>}
-      {is === 'string' && <div>{value}</div>}
+      {/* <div>{value.css}</div> */}
+      {modeLang === 'html' && !isEditing && (
+        <div dangerouslySetInnerHTML={{ __html: value.html }} />
+      )}
+      {modeLang === 'css' && !isEditing && <div>{value.css}</div>}
+      {modeLang === 'js' && !isEditing && <div>{tryEval(value.js || '')}</div>}
       <EditInPlace
-        value={value}
-        onChange={(value: string) => onValueChange(value)}
+        value={value[modeLang]}
+        onChange={(value: ObjLang) =>
+          onValueChange((prev: ObjLang) => ({ ...prev, [modeLang]: value }))
+        }
         breakLine={false}
         colors={true}
         isEditing={isEditing}
         onBlur={() => setIsEditing(false)}
         showDivResult={false}
       />
-    </div>
+    </MainStyle>
   )
 }
