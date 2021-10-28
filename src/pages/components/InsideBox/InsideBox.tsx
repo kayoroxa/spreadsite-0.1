@@ -24,9 +24,22 @@ InsideBox.defaultProps = {
 }
 
 const MainStyle = styled.div`
+  cursor: pointer;
+  width: 300px;
+  /* border: 1px solid black; */
+  /* border-radius: 5px; */
+  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
+  margin: 20px;
+  background: lightcyan;
+  display: flex;
+  /* flex-direction: column; */
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+
   ${({ cssInput }) => {
     return cssInput
-  }}
+  }};
 `
 
 export default function InsideBox({
@@ -41,7 +54,7 @@ export default function InsideBox({
   return (
     <MainStyle
       onClick={() => setIsEditing(true)}
-      style={{ cursor: 'pointer', width: '300px', border: '1px solid black' }}
+      // style={{ cursor: 'pointer', width: '300px', border: '1px solid black' }}
       cssInput={value.css}
     >
       {/* <div>{value.css}</div> */}
