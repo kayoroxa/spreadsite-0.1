@@ -15,6 +15,7 @@ interface Props {
   modeLang: 'js' | 'html' | 'css'
   printBrothers: Function
   tryEval: Function
+  allowEdit: boolean
 }
 
 InsideBox.defaultProps = {
@@ -24,7 +25,6 @@ InsideBox.defaultProps = {
 }
 
 const MainStyle = styled.div`
-  cursor: pointer;
   width: 100%;
   height: 100%;
   /* min-height: 100px; */
@@ -50,25 +50,27 @@ export default function InsideBox({
   modeLang,
   printBrothers,
   tryEval,
+  allowEdit,
 }: Props) {
   const [isEditing, setIsEditing] = useState(false)
   // console.log({ id: value, printBrothers: printBrothers() })
+  const showCode = !isEditing || !allowEdit
   return (
     <MainStyle
       onClick={() => setIsEditing(true)}
-      // style={{ cursor: 'pointer', width: '300px', border: '1px solid black' }}
+      style={{ cursor: allowEdit ? 'pointer' : 'default' }}
       cssInput={value.css}
     >
       {/* <div>{value.css}</div> */}
 
-      {modeLang === 'html' && !isEditing && (
+      {modeLang === 'html' && showCode && (
         <div dangerouslySetInnerHTML={{ __html: value.html }} />
       )}
-      {modeLang === 'css' && !isEditing && <div>{value.css}</div>}
-      {modeLang === 'js' && !isEditing && (
+      {modeLang === 'css' && showCode && <div>{value.css}</div>}
+      {modeLang === 'js' && showCode && (
         <div style={{ width: '100%' }}>{tryEval(value.js || '')}</div>
       )}
-      {isEditing && (
+      {isEditing && allowEdit && (
         <EditInPlace
           value={value[modeLang]}
           onChange={(value: ObjLang) =>

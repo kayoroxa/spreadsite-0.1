@@ -19,6 +19,7 @@ interface IProps {
   setAllValues: Dispatch<SetStateAction<I_Code[]>>
   index: number
   mode: 'js' | 'html' | 'css'
+  allowEdit: boolean
 }
 
 type ValuesFunc = (prev: I_Code) => I_Code
@@ -28,6 +29,7 @@ export default function InCell({
   setAllValues,
   index,
   mode,
+  allowEdit,
 }: IProps) {
   function handleSetAllValues(index: number, valuesFunc: ValuesFunc) {
     setAllValues(prev => {
@@ -46,22 +48,26 @@ export default function InCell({
 
   return (
     <>
-      <span
-        style={{
-          position: 'absolute',
-          background: 'gray',
-          opacity: '0.2',
-          borderRadius: '5px',
-        }}
-      >
-        {index}
-      </span>
+      {allowEdit && (
+        <span
+          style={{
+            position: 'absolute',
+            background: 'gray',
+            opacity: '0.2',
+            borderRadius: '5px',
+          }}
+        >
+          {index}
+        </span>
+      )}
+
       <InsideBox
         value={allValues[index]}
         onValueChange={valueFunc => handleSetAllValues(index, valueFunc)}
         modeLang={mode}
         printBrothers={() => allValues}
         tryEval={tryEval}
+        allowEdit={allowEdit}
       />
     </>
   )
