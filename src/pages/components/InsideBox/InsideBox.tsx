@@ -25,12 +25,13 @@ InsideBox.defaultProps = {
 
 const MainStyle = styled.div`
   cursor: pointer;
-  min-width: 300px;
-  min-height: 100px;
-  max-width: fit-content;
+  width: 100%;
+  height: 100%;
+  /* min-height: 100px; */
+  /* max-width: fit-content; */
 
   box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
-  margin: 20px;
+  /* margin: 20px; */
   background: lightcyan;
   display: flex;
   /* flex-direction: column; */
@@ -59,6 +60,7 @@ export default function InsideBox({
       cssInput={value.css}
     >
       {/* <div>{value.css}</div> */}
+
       {modeLang === 'html' && !isEditing && (
         <div dangerouslySetInnerHTML={{ __html: value.html }} />
       )}
