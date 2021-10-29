@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 export const ContainerEditCodeDT = styled.div`
-  position: absolute;
+  position: fixed;
   background-color: #242424;
   box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.75);
   width: 40vh;
@@ -48,5 +48,15 @@ export const ContainerEditCodeDT = styled.div`
     font-family: 'Fira Code', monospace;
     flex: 1;
     box-sizing: border-box;
+    resize: none;
+  }
+
+  button.toggle {
+    background-color: gray;
+    color: white;
+    border: none;
+    padding: 5px 0px;
+
+    font-size: 15px;
   }
 `

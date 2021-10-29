@@ -55,8 +55,11 @@ export default function InCell({
           style={{
             position: 'absolute',
             background: 'gray',
-            opacity: '0.2',
+            opacity: '0.3',
             borderRadius: '5px',
+            padding: '0px 5px',
+            fontSize: '30px',
+            color: 'white',
           }}
         >
           {index}

@@ -43,7 +43,6 @@ export default function MainCells() {
   const [lastCLickIndex, setLastClickIndex] = useState<number | null>(null)
   return (
     <div>
-      <p>{mode}</p>
       {/* <p>{JSON.stringify(allValues)}</p> */}
       <p>{JSON.stringify(codes)}</p>
 
@@ -51,7 +50,11 @@ export default function MainCells() {
         {allowEdit ? 'allowEdit' : 'not allowEdit'}
       </button>
       {lastCLickIndex !== null && allowEdit && (
-        <EditCodeDT setMode={setMode} close={() => setLastClickIndex(null)}>
+        <EditCodeDT
+          setMode={setMode}
+          close={() => setLastClickIndex(null)}
+          mode={mode}
+        >
           <textarea
             className="code-input"
             // onBlur={() => setLastClickIndex(null)}
@@ -74,7 +77,7 @@ export default function MainCells() {
         layout={layout}
         cols={80}
         rowHeight={2}
-        width={1200}
+        width={window.innerWidth}
       >
         <div
           key="a"

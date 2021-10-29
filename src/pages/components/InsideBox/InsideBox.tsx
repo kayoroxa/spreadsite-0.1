@@ -27,12 +27,6 @@ InsideBox.defaultProps = {
 const MainStyle = styled.div`
   width: 100%;
   height: 100%;
-  /* min-height: 100px; */
-  /* max-width: fit-content; */
-
-  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
-  /* margin: 20px; */
-  background: lightcyan;
   display: flex;
   /* flex-direction: column; */
   align-items: center;
@@ -57,6 +51,7 @@ export default function InsideBox({
   const showCode = !isEditing || !allowEdit
   return (
     <MainStyle
+      className="InsideBox"
       onClick={() => setIsEditing(true)}
       style={{ cursor: allowEdit ? 'pointer' : 'default' }}
       cssInput={value.css}

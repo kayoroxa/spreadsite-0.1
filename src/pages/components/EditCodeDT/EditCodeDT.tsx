@@ -8,14 +8,30 @@ interface IProps {
   setMode: Dispatch<SetStateAction<'js' | 'html' | 'css'>>
   children: React.ReactNode
   close: () => any
+  mode: 'js' | 'html' | 'css'
 }
-const EditCodeDT = ({ setMode, children, close }: IProps) => {
+const EditCodeDT = ({ setMode, children, close, mode }: IProps) => {
   return (
     <ContainerEditCodeDT>
       <div className="head">
-        <button onClick={() => setMode('js')}>js</button>
-        <button onClick={() => setMode('html')}>html</button>
-        <button onClick={() => setMode('css')}>css</button>
+        <button
+          onClick={() => setMode('js')}
+          className={mode === 'js' ? 'toggle' : ''}
+        >
+          js
+        </button>
+        <button
+          onClick={() => setMode('html')}
+          className={mode === 'html' ? 'toggle' : ''}
+        >
+          html
+        </button>
+        <button
+          onClick={() => setMode('css')}
+          className={mode === 'css' ? 'toggle' : ''}
+        >
+          css
+        </button>
         <button onClick={() => close()} className="red">
           Close
         </button>
