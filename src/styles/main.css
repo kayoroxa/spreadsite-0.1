@@ -1,0 +1,42 @@
+button {
+  background: rgb(226, 226, 226);
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  color: #000;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  margin: 10px 0;
+  padding: 10px;
+  text-align: center;
+  margin: 0 10px;
+  /* width: 100%; */
+}
+button.red {
+  background: #dd0000;
+  color: #fff;
+}
+
+button:hover {
+  background: rgb(255, 255, 255);
+}
+
+button.red:hover {
+  background: rgb(253, 34, 34);
+}
+
+.react-draggable {
+  cursor: grab;
+}
+.react-draggable div {
+  cursor: grab !important;
+}
+textarea {
+  color: white;
+}
+
+.contorno {
+  border-style: dotted;
+  border-color: #707070;
+  border-width: 2px;
+}

@@ -3,14 +3,29 @@ import _ from 'lodash'
 import { useState } from 'react'
 import { I_Code } from '../../../utils/@types/sheetTypes'
 import InCell from '../InCell'
+import EditCodeDT from '../EditCodeDT'
+import EditInPlace from '../EditInPlace'
+import { useStoreActions, useStoreState } from 'easy-peasy'
+import { MethodsStoreModel } from '../../../../store/methodsStore'
+
+const codeInit = {
+  js: '',
+  html: '',
+  css: '',
+}
 
 export default function MainCells() {
+  const { codes, isEditing } = useStoreState<MethodsStoreModel>(state => state)
+  const { setCodes, setIsEditing } = useStoreActions<MethodsStoreModel>(
+    actions => actions
+  )
+
   const layout = [
-    { i: 'a', x: 0, y: 0, w: 11, h: 7, static: true },
-    { i: 'b', x: 1, y: 0, w: 11, h: 7, static: true },
-    { i: 'c', x: 4, y: 0, w: 11, h: 7, static: true },
+    { i: 'a', x: 0, y: 0, w: 11, h: 7 },
+    { i: 'b', x: 1, y: 0, w: 11, h: 7 },
+    { i: 'c', x: 4, y: 0, w: 11, h: 7 },
   ]
-  const [allowEdit, setAllowEdit] = useState(false)
+  const [allowEdit, setAllowEdit] = useState(true)
   const [mode, setMode] = useState<'js' | 'html' | 'css'>('js')
 
   const [allValues, setAllValues] = useState<I_Code[]>([
@@ -25,17 +40,34 @@ export default function MainCells() {
       css: '',
     },
   ])
-
+  const [lastCLickIndex, setLastClickIndex] = useState<number | null>(null)
   return (
     <div>
       <p>{mode}</p>
-      <p>{JSON.stringify(allValues)}</p>
+      {/* <p>{JSON.stringify(allValues)}</p> */}
+      <p>{JSON.stringify(codes)}</p>
+
       <button onClick={() => setAllowEdit(!allowEdit)}>
         {allowEdit ? 'allowEdit' : 'not allowEdit'}
       </button>
-      <button onClick={() => setMode('js')}>js</button>
-      <button onClick={() => setMode('html')}>html</button>
-      <button onClick={() => setMode('css')}>css</button>
+      {lastCLickIndex !== null && allowEdit && (
+        <EditCodeDT setMode={setMode} close={() => setLastClickIndex(null)}>
+          <textarea
+            className="code-input"
+            // onBlur={() => setLastClickIndex(null)}
+            onChange={e =>
+              setCodes((prev: I_Code[]) => {
+                const newCodes = _.cloneDeep(prev)
+                newCodes[lastCLickIndex][mode] = e.target.value
+                // console.log({ newCodes })
+                return newCodes
+              })
+            }
+            value={codes[lastCLickIndex][mode]}
+          />
+        </EditCodeDT>
+      )}
+
       <GridLayout
         className="layout"
         compactType={null}
@@ -44,31 +76,43 @@ export default function MainCells() {
         rowHeight={2}
         width={1200}
       >
-        <div key="a">
+        <div
+          key="a"
+          onClick={() => setLastClickIndex(0)}
+          className={lastCLickIndex === 0 && allowEdit ? 'contorno' : ''}
+        >
           <InCell
-            allValues={allValues}
-            setAllValues={setAllValues}
+            allValues={codes}
+            setAllValues={setCodes}
             index={0}
             mode={mode}
-            allowEdit={allowEdit}
+            allowEdit={false}
           />
         </div>
-        <div key="b">
+        <div
+          key="b"
+          onClick={() => setLastClickIndex(1)}
+          className={lastCLickIndex === 1 && allowEdit ? 'contorno' : ''}
+        >
           <InCell
-            allValues={allValues}
-            setAllValues={setAllValues}
+            allValues={codes}
+            setAllValues={setCodes}
             index={1}
             mode={mode}
-            allowEdit={allowEdit}
+            allowEdit={false}
           />
         </div>
-        <div key="c">
+        <div
+          key="c"
+          onClick={() => setLastClickIndex(2)}
+          className={lastCLickIndex === 2 && allowEdit ? 'contorno' : ''}
+        >
           <InCell
-            allValues={allValues}
-            setAllValues={setAllValues}
+            allValues={codes}
+            setAllValues={setCodes}
             index={2}
             mode={mode}
-            allowEdit={allowEdit}
+            allowEdit={false}
           />
         </div>
       </GridLayout>

@@ -5,24 +5,6 @@ body {
   width: 100%;
 }
 
-button {
-  background: #fff;
-  border: 1px solid #ccc;
-  border-radius: 3px;
-  color: #000;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: bold;
-  margin: 10px 0;
-  padding: 10px;
-  text-align: center;
-  margin: 0 10px;
-  /* width: 100%; */
-}
-button:hover {
-  background: #eee;
-}
-
 .react-grid-layout {
   background: #eee;
   margin-top: 10px;

@@ -1,5 +1,8 @@
 import '../styles/reset.css'
-import '../styles/styles.css'
+import '../styles/cells.css'
+import '../styles/main.css'
+// import '../styles/debug.css'
+
 // import '../styles/example-styles.css'
 import type { AppProps } from 'next/app'
 

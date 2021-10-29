@@ -21,7 +21,7 @@
     "isolatedModules": true
   },
   "exclude": ["node_modules"],
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/pages/teste.jsx", "src/pages/local.jsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/pages/teste.jsx", "src/pages/local.jsx", "src/pages/components/EditCodeDevTools/StyleEditCode.js"],
   "typeRoots": [
     "node_modules/@types"
   ],

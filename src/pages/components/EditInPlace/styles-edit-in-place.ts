@@ -7,7 +7,7 @@ export const ContainerEditInPlace = styled.div`
   span {
     width: 100%;
     height: 100%;
-    background-color: pink;
+    /* background-color: pink; */
     -webkit-user-modify: read-write-plaintext-only;
     margin-top: 0px;
     margin-left: 5px;
@@ -18,7 +18,8 @@ export const ContainerEditInPlace = styled.div`
   textarea {
     width: 100%;
     height: 100%;
-    background-color: pink;
+
+    background-color: #242424;
     -webkit-user-modify: read-write-plaintext-only;
     resize: none;
   }

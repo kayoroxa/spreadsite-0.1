@@ -20,6 +20,7 @@ interface IProps {
   index: number
   mode: 'js' | 'html' | 'css'
   allowEdit: boolean
+  showIndex?: boolean
 }
 
 type ValuesFunc = (prev: I_Code) => I_Code
@@ -30,6 +31,7 @@ export default function InCell({
   index,
   mode,
   allowEdit,
+  showIndex = true,
 }: IProps) {
   function handleSetAllValues(index: number, valuesFunc: ValuesFunc) {
     setAllValues(prev => {
@@ -48,7 +50,7 @@ export default function InCell({
 
   return (
     <>
-      {allowEdit && (
+      {showIndex && (
         <span
           style={{
             position: 'absolute',

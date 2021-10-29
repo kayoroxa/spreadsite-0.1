@@ -20,6 +20,7 @@ const EditInPlace = ({
   onBlur,
   showDivResult = true,
 }: IProps) => {
+  console.log({ value })
   const textAreaRef = useRef<HTMLTextAreaElement>(null)
   useEffect(() => {
     if (isEditing) {
