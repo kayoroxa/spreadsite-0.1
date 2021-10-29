@@ -7,6 +7,8 @@ import EditCodeDT from '../EditCodeDT'
 import EditInPlace from '../EditInPlace'
 import { useStoreActions, useStoreState } from 'easy-peasy'
 import { MethodsStoreModel } from '../../../../store/methodsStore'
+import { useLayoutEffect } from 'react'
+import useWindowSize from '../../../utils/useWindowSize'
 
 const codeInit = {
   js: '',
@@ -15,6 +17,7 @@ const codeInit = {
 }
 
 export default function MainCells() {
+  const [width, height] = useWindowSize()
   const { codes, isEditing } = useStoreState<MethodsStoreModel>(state => state)
   const { setCodes, setIsEditing } = useStoreActions<MethodsStoreModel>(
     actions => actions
@@ -77,7 +80,7 @@ export default function MainCells() {
         layout={layout}
         cols={80}
         rowHeight={2}
-        width={window.innerWidth}
+        width={width}
       >
         <div
           key="a"
@@ -90,6 +93,7 @@ export default function MainCells() {
             index={0}
             mode={mode}
             allowEdit={false}
+            showIndex={lastCLickIndex !== null && allowEdit ? true : false}
           />
         </div>
         <div
@@ -103,6 +107,7 @@ export default function MainCells() {
             index={1}
             mode={mode}
             allowEdit={false}
+            showIndex={lastCLickIndex !== null && allowEdit ? true : false}
           />
         </div>
         <div
@@ -116,6 +121,7 @@ export default function MainCells() {
             index={2}
             mode={mode}
             allowEdit={false}
+            showIndex={lastCLickIndex !== null && allowEdit ? true : false}
           />
         </div>
       </GridLayout>
