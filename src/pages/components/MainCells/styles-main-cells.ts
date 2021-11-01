@@ -11,6 +11,12 @@ export const ContainerMainCells = styled.div`
       box-sizing: border-box;
       margin: 10px;
     }
+
+    .delete {
+      background-color: #ff0000;
+      opacity: 0.5;
+      color: #fff;
+    }
   }
 
   .layout * {

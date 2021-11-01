@@ -17,8 +17,14 @@ export default function MainCells() {
     state => state
   )
   const [localLayouts, setLocalLayouts] = useState<I_Layout[]>([])
-  const { setCodes, setIsEditing, setLayout, addLayout, resetLayout } =
-    useStoreActions<MethodsStoreModel>(actions => actions)
+  const {
+    setCodes,
+    setIsEditing,
+    setLayout,
+    addLayout,
+    resetLayout,
+    deleteCell,
+  } = useStoreActions<MethodsStoreModel>(actions => actions)
 
   const [allowEdit, setAllowEdit] = useState(true)
   const [mode, setMode] = useState<'js' | 'html' | 'css'>('js')
@@ -49,12 +55,14 @@ export default function MainCells() {
             onChange={e =>
               setCodes((prev: I_Code[]) => {
                 const newCodes = _.cloneDeep(prev)
-                newCodes[lastCLickIndex][mode] = e.target.value
-                // console.log({ newCodes })
-                return newCodes
+                if (newCodes?.[lastCLickIndex]) {
+                  newCodes[lastCLickIndex][mode] = e.target.value
+                  // console.log({ newCodes })
+                  return newCodes
+                }
               })
             }
-            value={codes[lastCLickIndex][mode]}
+            value={codes[lastCLickIndex]?.[mode]}
           />
         </EditCodeDT>
       )}
@@ -68,6 +76,8 @@ export default function MainCells() {
         onLayoutChange={(layout: I_Layout[]) => {
           setLocalLayouts(layout)
         }}
+        preventCollision={true}
+        allowOverlap={true}
       >
         {localLayouts.map((layout, index) => {
           return (
@@ -98,6 +108,11 @@ export default function MainCells() {
         </button>
         <button onClick={() => addLayout()}>Add Layout</button>
         <button onClick={() => resetLayout()}>Reset Layout</button>
+        {lastCLickIndex !== null && allowEdit && (
+          <button className="delete" onClick={() => deleteCell(lastCLickIndex)}>
+            Delete Select
+          </button>
+        )}
       </div>
       {/* <button
         onClick={() => setAllowEdit(!allowEdit)}

@@ -6,6 +6,7 @@ export interface MethodsStoreModel {
   setLayout: Action<MethodsStoreModel, I_Layout[] | Function>
   addLayout: Action<MethodsStoreModel>
   resetLayout: Action<MethodsStoreModel>
+  deleteCell: Action<MethodsStoreModel, number>
 
   codes: I_Code[]
   setCodes: Action<MethodsStoreModel, I_Code[] | Function>
@@ -46,6 +47,15 @@ const store = createStore<MethodsStoreModel>(
     resetLayout: action(state => {
       state.layouts = []
       state.codes = []
+    }),
+    deleteCell: action((state, payload) => {
+      if (payload === state.layouts.length - 1) {
+        state.layouts.pop()
+        state.codes.pop()
+      } else {
+        state.layouts.splice(payload, 1)
+        state.codes.splice(payload, 1)
+      }
     }),
     codes: [],
     setCodes: action((state, payload) => {
