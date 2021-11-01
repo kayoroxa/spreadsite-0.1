@@ -48,9 +48,14 @@ button {
   margin: 0 10px;
   /* width: 100%; */
 }
-button.red {
-  background: #dd0000;
+button.close {
+  /* background: #585858; */
+  background-color: transparent;
   color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 50px;
+  padding: 10px 0px;
+  /* opacity: 0.5; */
 }
 
 button:hover {
@@ -76,4 +81,38 @@ textarea {
   border-style: dotted;
   border-color: #eeeeee;
   border-width: 2.5px;
+}
+
+input {
+  border: none;
+  background-color: transparent;
+  outline: none;
+  border-bottom: 1px solid #ccc;
+  background: transparent;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 10px;
+  width: 100%;
+  margin: 10px 0;
+  transition: all 0.1s linear;
+}
+
+input:focus {
+  background: none;
+  background-color: transparent;
+  border-bottom: 1px solid rgb(0, 224, 176);
+  /* background: transparent; */
+  color: white;
+  font-size: 14.5px;
+  font-weight: bold;
+  padding: 10px;
+  width: 100%;
+  margin: 10px 0;
+  transition: all 0.1s linear;
+}
+
+.layout *:has(input) {
+  background-color: transparent;
+  background: none;
 }
