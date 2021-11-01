@@ -7,8 +7,9 @@ import EditCodeDT from '../EditCodeDT'
 import EditInPlace from '../EditInPlace'
 import { useStoreActions, useStoreState } from 'easy-peasy'
 import { MethodsStoreModel } from '../../../../store/methodsStore'
-import { useLayoutEffect, useEffect } from 'react'
+import { useLayoutEffect, useEffect, useMemo } from 'react'
 import useWindowSize from '../../../utils/useWindowSize'
+import { ContainerMainCells } from './styles-main-cells'
 
 export default function MainCells() {
   const [width, height] = useWindowSize()
@@ -16,7 +17,7 @@ export default function MainCells() {
     state => state
   )
   const [localLayouts, setLocalLayouts] = useState<I_Layout[]>([])
-  const { setCodes, setIsEditing, setLayout } =
+  const { setCodes, setIsEditing, setLayout, addLayout, resetLayout } =
     useStoreActions<MethodsStoreModel>(actions => actions)
 
   const [allowEdit, setAllowEdit] = useState(true)
@@ -33,10 +34,9 @@ export default function MainCells() {
   }, [localLayouts])
 
   return (
-    <div>
-      <p>{JSON.stringify(localLayouts)}</p>
+    <ContainerMainCells>
+      {/* <p>{JSON.stringify(localLayouts)}</p> */}
       {/* <p>{JSON.stringify(codes)}</p> */}
-
       {lastCLickIndex !== null && allowEdit && (
         <EditCodeDT
           setMode={setMode}
@@ -58,13 +58,12 @@ export default function MainCells() {
           />
         </EditCodeDT>
       )}
-
       <GridLayout
         className="layout"
         compactType={null}
         layout={layouts}
         cols={80}
-        rowHeight={2}
+        rowHeight={6}
         width={width}
         onLayoutChange={(layout: I_Layout[]) => {
           setLocalLayouts(layout)
@@ -93,18 +92,19 @@ export default function MainCells() {
         })}
       </GridLayout>
 
-      <button
-        onClick={() => setAllowEdit(!allowEdit)}
-        style={{ position: 'fixed', bottom: '0px' }}
-      >
-        {allowEdit ? 'allowEdit' : 'not allowEdit'}
-      </button>
+      <div className="buttons">
+        <button onClick={() => setAllowEdit(!allowEdit)}>
+          {allowEdit ? 'Not Allow Edit' : 'Allow Edit'}
+        </button>
+        <button onClick={() => addLayout()}>Add Layout</button>
+        <button onClick={() => resetLayout()}>Reset Layout</button>
+      </div>
       {/* <button
         onClick={() => setAllowEdit(!allowEdit)}
         style={{ position: 'fixed', bottom: '0px', left: '50px' }}
       >
         {allowEdit ? 'allowEdit' : 'not allowEdit'}
       </button> */}
-    </div>
+    </ContainerMainCells>
   )
 }
