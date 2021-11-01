@@ -1,57 +1,42 @@
 import GridLayout from 'react-grid-layout'
 import _ from 'lodash'
 import { useState } from 'react'
-import { I_Code } from '../../../utils/@types/sheetTypes'
+import { I_Code, I_Layout } from '../../../utils/@types/sheetTypes'
 import InCell from '../InCell'
 import EditCodeDT from '../EditCodeDT'
 import EditInPlace from '../EditInPlace'
 import { useStoreActions, useStoreState } from 'easy-peasy'
 import { MethodsStoreModel } from '../../../../store/methodsStore'
-import { useLayoutEffect } from 'react'
+import { useLayoutEffect, useEffect } from 'react'
 import useWindowSize from '../../../utils/useWindowSize'
-
-const codeInit = {
-  js: '',
-  html: '',
-  css: '',
-}
 
 export default function MainCells() {
   const [width, height] = useWindowSize()
-  const { codes, isEditing } = useStoreState<MethodsStoreModel>(state => state)
-  const { setCodes, setIsEditing } = useStoreActions<MethodsStoreModel>(
-    actions => actions
+  const { codes, isEditing, layouts } = useStoreState<MethodsStoreModel>(
+    state => state
   )
+  const [localLayouts, setLocalLayouts] = useState<I_Layout[]>([])
+  const { setCodes, setIsEditing, setLayout } =
+    useStoreActions<MethodsStoreModel>(actions => actions)
 
-  const layout = [
-    { i: 'a', x: 0, y: 0, w: 11, h: 7 },
-    { i: 'b', x: 1, y: 0, w: 11, h: 7 },
-    { i: 'c', x: 4, y: 0, w: 11, h: 7 },
-  ]
   const [allowEdit, setAllowEdit] = useState(true)
   const [mode, setMode] = useState<'js' | 'html' | 'css'>('js')
 
-  const [allValues, setAllValues] = useState<I_Code[]>([
-    {
-      js: '',
-      html: '',
-      css: '',
-    },
-    {
-      js: '',
-      html: '',
-      css: '',
-    },
-  ])
   const [lastCLickIndex, setLastClickIndex] = useState<number | null>(null)
+
+  useEffect(() => {
+    setLocalLayouts(layouts)
+  }, [layouts])
+
+  useEffect(() => {
+    if (localLayouts.length > 0) setLayout(localLayouts)
+  }, [localLayouts])
+
   return (
     <div>
-      {/* <p>{JSON.stringify(allValues)}</p> */}
-      <p>{JSON.stringify(codes)}</p>
+      <p>{JSON.stringify(localLayouts)}</p>
+      {/* <p>{JSON.stringify(codes)}</p> */}
 
-      <button onClick={() => setAllowEdit(!allowEdit)}>
-        {allowEdit ? 'allowEdit' : 'not allowEdit'}
-      </button>
       {lastCLickIndex !== null && allowEdit && (
         <EditCodeDT
           setMode={setMode}
@@ -77,54 +62,49 @@ export default function MainCells() {
       <GridLayout
         className="layout"
         compactType={null}
-        layout={layout}
+        layout={layouts}
         cols={80}
         rowHeight={2}
         width={width}
+        onLayoutChange={(layout: I_Layout[]) => {
+          setLocalLayouts(layout)
+        }}
       >
-        <div
-          key="a"
-          onClick={() => setLastClickIndex(0)}
-          className={lastCLickIndex === 0 && allowEdit ? 'contorno' : ''}
-        >
-          <InCell
-            allValues={codes}
-            setAllValues={setCodes}
-            index={0}
-            mode={mode}
-            allowEdit={false}
-            showIndex={lastCLickIndex !== null && allowEdit ? true : false}
-          />
-        </div>
-        <div
-          key="b"
-          onClick={() => setLastClickIndex(1)}
-          className={lastCLickIndex === 1 && allowEdit ? 'contorno' : ''}
-        >
-          <InCell
-            allValues={codes}
-            setAllValues={setCodes}
-            index={1}
-            mode={mode}
-            allowEdit={false}
-            showIndex={lastCLickIndex !== null && allowEdit ? true : false}
-          />
-        </div>
-        <div
-          key="c"
-          onClick={() => setLastClickIndex(2)}
-          className={lastCLickIndex === 2 && allowEdit ? 'contorno' : ''}
-        >
-          <InCell
-            allValues={codes}
-            setAllValues={setCodes}
-            index={2}
-            mode={mode}
-            allowEdit={false}
-            showIndex={lastCLickIndex !== null && allowEdit ? true : false}
-          />
-        </div>
+        {localLayouts.map((layout, index) => {
+          return (
+            <div
+              key={layout.i}
+              onClick={() => setLastClickIndex(index)}
+              className={
+                lastCLickIndex === index && allowEdit ? 'contorno' : ''
+              }
+              data-grid={layout}
+            >
+              <InCell
+                allValues={codes}
+                setAllValues={setCodes}
+                index={index}
+                mode={mode}
+                allowEdit={false}
+                showIndex={lastCLickIndex !== null && allowEdit ? true : false}
+              />
+            </div>
+          )
+        })}
       </GridLayout>
+
+      <button
+        onClick={() => setAllowEdit(!allowEdit)}
+        style={{ position: 'fixed', bottom: '0px' }}
+      >
+        {allowEdit ? 'allowEdit' : 'not allowEdit'}
+      </button>
+      {/* <button
+        onClick={() => setAllowEdit(!allowEdit)}
+        style={{ position: 'fixed', bottom: '0px', left: '50px' }}
+      >
+        {allowEdit ? 'allowEdit' : 'not allowEdit'}
+      </button> */}
     </div>
   )
 }
