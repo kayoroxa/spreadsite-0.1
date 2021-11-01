@@ -32,6 +32,9 @@ const MainStyle = styled.div`
   align-items: center;
   justify-content: center;
   text-align: center;
+  * {
+    width: 100%;
+  }
 
   ${({ cssInput }) => {
     return cssInput
