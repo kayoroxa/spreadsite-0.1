@@ -10,7 +10,7 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #504e1a;
+  background: #626669;
   -webkit-border-radius: 1ex;
   -webkit-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.75);
 }
@@ -23,15 +23,21 @@ body {
   color: rgb(196, 196, 196);
   font-family: sans-serif;
   scrollbar-color: #292929 #292929 !important;
+  box-sizing: border-box;
 }
 
 .InsideBox {
-  background-color: #333333;
+  background-color: rgba(136, 136, 136, 0.2);
+  /* opacity: 0.1; */
   color: rgb(196, 196, 196);
   /* border-radius: 10px; */
   /* padding: 10px; */
   /* margin: 10px; */
-  box-shadow: 0px 15px 10px rgb(0, 0, 0, 0.2);
+  box-shadow: 0px 5px 6px rgb(0, 0, 0, 0.2) !important;
+}
+
+.InsideBox > * {
+  box-sizing: border-box;
 }
 
 button {
@@ -87,7 +93,7 @@ input {
   border: none;
   background-color: transparent;
   outline: none;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 2px solid #ccc;
   background: transparent;
   color: white;
   font-size: 14px;
@@ -101,7 +107,7 @@ input {
 input:focus {
   background: none;
   background-color: transparent;
-  border-bottom: 1px solid rgb(0, 224, 176);
+  border-bottom: 2px solid rgb(0, 224, 176);
   /* background: transparent; */
   color: white;
   font-size: 14.5px;

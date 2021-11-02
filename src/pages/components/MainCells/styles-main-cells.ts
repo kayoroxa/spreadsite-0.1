@@ -20,6 +20,8 @@ export const ContainerMainCells = styled.div`
   }
 
   .layout * {
-    overflow: hidden;
+    /* background: #fff; */
+    margin: 0;
+    overflow: hidden !important;
   }
 `

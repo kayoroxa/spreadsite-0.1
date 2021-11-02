@@ -32,8 +32,8 @@ const EditCodeDT = ({ setMode, children, close, mode }: IProps) => {
         >
           css
         </button>
-        <button onClick={() => close()} className="red">
-          Close
+        <button onClick={() => close()} className="close">
+          X
         </button>
       </div>
       <main>{children}</main>
